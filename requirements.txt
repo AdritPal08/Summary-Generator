@@ -1,0 +1,9 @@
+streamlit
+google-generativeai
+python-dotenv
+pandas
+logger
+textwrap3
+XlsxWriter
+openpyxl
+-e .
