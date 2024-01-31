@@ -17,8 +17,8 @@ if env_loaded:
 else:
     logging.error("Environment variables not loaded.")
 
-# api_key = os.getenv("GOOGLE_API_KEY")
-api_key = st.secrets["GOOGLE_API_KEY"]
+api_key = os.getenv("GOOGLE_API_KEY")
+# api_key = st.secrets["GOOGLE_API_KEY"]
 if api_key:
     genai.configure(api_key=api_key)
 else:
@@ -72,6 +72,12 @@ sidebar = st.sidebar
 
 # Get the excel file
 uploaded_file = st.sidebar.file_uploader("Upload your excel file: ", type=["xlsx"])
+
+
+# Get the text prompt from the user
+company_input = st.sidebar.text_input("Enter Company Name (if providing a single name): ", key="input")
+logging.info(f"User input comapny: {company_input}")
+
 # Check if the file is not None
 if uploaded_file is not None:
     # Read the excel file as a dictionary of DataFrames
@@ -89,15 +95,20 @@ if uploaded_file is not None:
     companies = data[column_name]
     # # Display the DataFrame
     # st.dataframe(data[column_name])
+elif company_input !="":
+  st.write("")
 else:
     # Display a message if no file is uploaded
-    st.write("Please upload an excel file to proceed.")
+    st.write("Please upload an Excel file or enter a company name to proceed.")
+
 
 submit=st.sidebar.button("⌛Summarize Now..", key="submit")
 
 company_name = []
 summary_company = []
 if submit:
+  if uploaded_file is not None and company_input == "":
+    
     try:
         # Create a spinner object
         with st.spinner('Generating response...'):
@@ -121,7 +132,22 @@ if submit:
                 progress_bar.progress((i + 1) * increment)
     except Exception as e:
         logging.error(e)
-        st.error(f"An error occurred: {e.message}")
+        st.error(f"An error occurred: {e}")
+  elif company_input != "":
+    with st.spinner('Generating response...'):
+      st.subheader("The Summaries are:")
+      prompt = f"Write a short summary of {company_input} in a formal tone. Summary will be minimum of 5 lines to maximum of 10 lines."
+      response = model.generate_content(prompt)
+      summary = to_markdown(response.text)
+      company_name.append(company_input)
+      summary_company.append(summary)
+      # Use st.write to display the company name
+      st.write(f"**{company_input}**")
+      # Use st.markdown to display the summary content
+      st.markdown(summary)
+  else:
+    st.write("Please enter a text prompt to proceed.")
+    st.stop() # Stop the execution of the app
 Summary_data = pd.DataFrame(list(zip(company_name, summary_company)), columns=["Company Name", "Summary"])
 excel_data = to_excel(Summary_data)
 
