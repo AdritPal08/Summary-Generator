@@ -63,7 +63,7 @@ model = genai.GenerativeModel(model_name="gemini-pro", generation_config=generat
 
 # initialize our streamlit app
 st.set_page_config(page_title="CompanyInsight Pro")
-st.header("Sing Fuels AI Assistance: CompanyInsight Pro")
+st.header("CompanyInsight Pro")
 st.write("An app that generates short summaries from given company names.")
 logging.info("Streamlit app initialized.")
 
