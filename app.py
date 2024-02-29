@@ -75,7 +75,7 @@ uploaded_file = st.sidebar.file_uploader("Upload your excel file: ", type=["xlsx
 
 
 # Get the text prompt from the user
-company_input = st.sidebar.text_input("Enter Company Name (if providing a single name): ", key="input")
+company_input = st.sidebar.text_input("Enter Company Name (full name): ", key="input")
 logging.info(f"User input comapny: {company_input}")
 
 # Check if the file is not None
