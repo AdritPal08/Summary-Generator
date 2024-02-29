@@ -120,8 +120,8 @@ if submit:
             # Loop through the companies
             for i, company in enumerate(companies):
                 # prompt = f"Write a short summary of {company} in a formal tone. Summary will be minimum of 5 lines to maximum of 10 lines." 
-                prompt = f'''Write a summary of the company:{company} in a formal tone and with as much detail as possible. Please keep in mind Don't provide any wrong information or doubt information. All the information should be correct.  
-                Please summarize the company with all the relevant information within a minimum of 8 lines and a maximum of 10 lines.'''   
+                prompt = f'''collect information of the company:{company} as much detail as possible. Please keep in mind Don't provide any wrong informations or doubt informations. Must check All the information should be correct.  
+                I want the output only summary. Please write a summary based on the collected information within a minimum of 8 lines and a maximum of 10 lines in a formal tone.'''   
                 response = model.generate_content(prompt)
                 summary = to_markdown(response.text)
                 company_name.append(company)
@@ -139,9 +139,9 @@ if submit:
     with st.spinner('Generating response...'):
       st.subheader("The Summaries are:")
       # prompt = f"Write a short summary of {company_input} in a formal tone. Summary will be minimum of 5 lines to maximum of 10 lines."
-      prompt = f'''Write a summary of the company:{company_input} in a formal tone and with as much detail as possible. Please keep in mind Don't provide any wrong information or doubt information. All the information should be correct.  
-                Please summarize the company with all the relevant information within a minimum of 8 lines and a maximum of 10 lines.'''
-      response = model.generate_content(prompt)
+      prompt = f'''collect information of the company:{company_input} as much detail as possible. Please keep in mind Don't provide any wrong informations or doubt informations. Must check All the information should be correct..  
+                I want the output only summary. Please write a summary based on the collected information within a minimum of 8 lines and a maximum of 10 lines in a formal tone.'''  
+      response = model.generate_content(prompt, stream=True)
       summary = to_markdown(response.text)
       company_name.append(company_input)
       summary_company.append(summary)
