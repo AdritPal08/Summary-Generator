@@ -9,6 +9,7 @@ import pandas as pd
 import streamlit as st
 import io
 import os
+from streamlit_lottie import st_lottie
 
 # take environment variables from .env.
 env_loaded = load_dotenv()
@@ -17,8 +18,8 @@ if env_loaded:
 else:
     logging.error("Environment variables not loaded.")
 
-# api_key = os.getenv("GOOGLE_API_KEY")
-api_key = st.secrets["GOOGLE_API_KEY"]
+api_key = os.getenv("GOOGLE_API_KEY")
+# api_key = st.secrets["GOOGLE_API_KEY"]
 if api_key:
     genai.configure(api_key=api_key)
 else:
@@ -51,19 +52,30 @@ def to_excel(df):
   return output.getvalue()
 
 
-generation_config = {
-  "temperature": 0.4,
-  "top_p": 1,
-  "top_k": 32,
-  "max_output_tokens": 4096,
-}
+# generation_config = {
+#   "temperature": 0.4,
+#   "top_p": 1,
+#   "top_k": 32,
+#   "max_output_tokens": 4096,
+# }
 
 
-model = genai.GenerativeModel(model_name="gemini-pro", generation_config=generation_config)
+# model = genai.GenerativeModel(model_name="gemini-pro", generation_config=generation_config)
+model = genai.GenerativeModel(model_name="gemini-pro")
 
 # initialize our streamlit app
-st.set_page_config(page_title="CompanyInsight Pro")
-st.header("CompanyInsight Pro")
+# st.set_page_config(page_title="CompanyInsight Pro")
+st.set_page_config(page_title="CompanyInsight Pro", page_icon="🤖", layout="centered", initial_sidebar_state = "auto")
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+# st.header("CompanyInsight Pro")
+st.header(":red[CompanyInsight] Pro 🔎",divider= 'rainbow')
 st.write("An app that generates short summaries from given company names.")
 logging.info("Streamlit app initialized.")
 
@@ -99,7 +111,10 @@ elif company_input !="":
   st.write("")
 else:
     # Display a message if no file is uploaded
-    st.write("Please upload an Excel file or enter a company name to proceed.")
+    st.error("Please upload an Excel file or enter a company name to proceed.")
+    col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
+    with col2:
+        st_lottie("https://lottie.host/e1de7a95-db4b-4844-b7af-04ccc2eabb4f/fsFmquVkPw.json", width=250, height=250)
 
 
 submit=st.sidebar.button("⌛Summarize Now..", key="submit")

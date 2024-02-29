@@ -6,4 +6,6 @@ logger
 textwrap3
 XlsxWriter
 openpyxl
+streamlit_lottie
+emoji
 -e .
